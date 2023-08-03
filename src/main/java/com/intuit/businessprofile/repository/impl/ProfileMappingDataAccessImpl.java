@@ -3,6 +3,7 @@ package com.intuit.businessprofile.repository.impl;
 import com.intuit.businessprofile.constant.StringConstants;
 import com.intuit.businessprofile.entity.ProfileMappingEntity;
 import com.intuit.businessprofile.entity.SubscriptionEntity;
+import com.intuit.businessprofile.entity.projection.LatestValidRevisionProjection;
 import com.intuit.businessprofile.enums.ValidationStatus;
 import com.intuit.businessprofile.exception.DatabaseException;
 import com.intuit.businessprofile.model.ProfileMapping;
@@ -64,16 +65,16 @@ public class ProfileMappingDataAccessImpl implements ProfileMappingDataAccess {
         GroupOperation group = Aggregation.group(ProfileMapping.BUSINESS_PROFILE_ID)
           .first(ProfileMapping.REVISION).as("highestRevision")
           .push(Aggregation.ROOT).as("documents");
-        ProjectionOperation project = Aggregation.project("highestRevision")
+        ProjectionOperation project = Aggregation.project(Fields.fields("highestRevision"))
           .and(ArrayOperators.Filter.filter("documents")
             .as("doc")
-            .by(ComparisonOperators.Eq.valueOf("$$doc.revision").equalToValue("highestRevision"))
+            .by(ComparisonOperators.Eq.valueOf("$$doc.revision").equalToValue("$highestRevision"))
           ).as("documents");
         Aggregation aggregation = Aggregation.newAggregation(match, sort, group, project);
-        AggregationResults<ProfileMappingEntity> results = template.aggregate(aggregation,
+        AggregationResults<LatestValidRevisionProjection> results = template.aggregate(aggregation,
           ProfileMappingEntity.class,
-          ProfileMappingEntity.class);
-        return results.getMappedResults();
+          LatestValidRevisionProjection.class);
+        return results.getMappedResults().get(0).getDocuments();
 
     }
 

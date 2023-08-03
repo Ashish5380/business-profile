@@ -42,13 +42,12 @@ public class BusinessProfileDataAccessImpl implements BusinessProfileDataAccess 
     @Override
     public void upsertBusinessProfile(final BusinessProfileEntity entity) {
         try {
-            Query query = new Query(Criteria.where("_id").is(entity.getId()));
+            Query query = new Query(Criteria.where("email").is(entity.getEmail()));
 
             Update update = new Update()
               .set("legalName", entity.getLegalName())
               .set("businessAddress", entity.getBusinessAddress())
               .set("legalAddress", entity.getLegalAddress())
-              .set("email", entity.getEmail())
               .set("website", entity.getWebsite())
               .set("taxIdentifier", entity.getTaxIdentifier())
               .set("companyName", entity.getCompanyName())
