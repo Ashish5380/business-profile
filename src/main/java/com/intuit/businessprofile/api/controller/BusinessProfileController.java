@@ -4,6 +4,7 @@ import com.intuit.businessprofile.api.BusinessProfileApi;
 import com.intuit.businessprofile.api.fallback.BusinessProfileFallback;
 import com.intuit.businessprofile.dto.request.BusinessProfileCreateRequest;
 import com.intuit.businessprofile.dto.request.BusinessProfileUpdateRequest;
+import com.intuit.businessprofile.dto.response.BusinessProfileResponse;
 import com.intuit.businessprofile.mapper.BusinessProfileMapper;
 import com.intuit.businessprofile.mapper.BusinessProfileRevisionMapper;
 import com.intuit.businessprofile.service.BusinessProfileRevisionManager;
@@ -15,6 +16,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -71,7 +74,11 @@ public class BusinessProfileController implements BusinessProfileApi {
     @Override
     public ResponseEntity<?> getAllBusinessProfiles() {
         log.info("Request to fetch all business-profiles");
-        return new ResponseEntity<>(businessProfileRevisionManager.getAllBusinessProfile(), HttpStatus.OK);
+        List<BusinessProfileResponse> responseList =
+          businessProfileRevisionManager.getAllBusinessProfile().stream()
+            .map(BusinessProfileMapper::mapToResponse)
+            .toList();
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
     @Override
