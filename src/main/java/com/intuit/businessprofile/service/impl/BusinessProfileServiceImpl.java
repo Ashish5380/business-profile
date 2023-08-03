@@ -118,7 +118,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
           businessProfileDataAccess.getBusinessProfileByEmail(request.getEmail());
 
         // If list is empty which tells us that no data for the given email exists
-        final boolean exists = CollectionUtils.isEmpty(entityList);
+        final boolean exists = !CollectionUtils.isEmpty(entityList);
 
         if (exists) {
             // Throw error for validation failure

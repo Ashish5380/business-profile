@@ -3,6 +3,7 @@ package com.intuit.businessprofile.api.controller;
 import com.intuit.businessprofile.api.ProductApi;
 import com.intuit.businessprofile.api.fallback.ProductFallback;
 import com.intuit.businessprofile.dto.request.ProductRequest;
+import com.intuit.businessprofile.mapper.ProductMapper;
 import com.intuit.businessprofile.service.ProductService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,16 @@ public class ProductController implements ProductApi {
     @Override
     public ResponseEntity<?> createProduct(final ProductRequest request) {
         log.info("Request for creating product :: {}", request);
-        return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(ProductMapper.mapToResponse(productService.createProduct(request)),
+          HttpStatus.CREATED);
     }
 
 
     @Override
     public ResponseEntity<?> getProducts(final String externalProductId) {
         log.info("Request for fetching product with externalProductId :: {}", externalProductId);
-        return new ResponseEntity<>(productService.getProduct(externalProductId), HttpStatus.OK);
+        return new ResponseEntity<>(ProductMapper.mapToResponse(productService.getProduct(externalProductId)),
+          HttpStatus.OK);
     }
 
 

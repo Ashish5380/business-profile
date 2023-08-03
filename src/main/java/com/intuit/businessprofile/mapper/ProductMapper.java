@@ -6,6 +6,8 @@ import com.intuit.businessprofile.dto.response.ProductResponse;
 import com.intuit.businessprofile.entity.ProductEntity;
 import lombok.experimental.UtilityClass;
 
+import java.util.Objects;
+
 @UtilityClass
 public class ProductMapper {
 

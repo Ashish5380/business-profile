@@ -55,8 +55,8 @@ public class BusinessProfileRevisionManagerImpl implements BusinessProfileRevisi
         // be used as well.
         if(locker.hasLock(
           String.format(KeyConstants.Keys.BUSINESS_PROFILE_CREATE_KEY,request.getEmail()),
-          1,
-          TimeUnit.MINUTES)) {
+          10,
+          TimeUnit.MILLISECONDS)) {
             log.info("Creating business profile for creation request :: {}", request);
             BusinessProfileResponseBO response = businessProfileService.createBusinessProfile(request);
             updateRevision(response);
@@ -76,8 +76,8 @@ public class BusinessProfileRevisionManagerImpl implements BusinessProfileRevisi
         // be used as well.
         if(locker.hasLock(
           String.format(KeyConstants.Keys.BUSINESS_PROFILE_REVISION_KEY,businessProfileId),
-          1,
-          TimeUnit.MINUTES)) {
+          10,
+          TimeUnit.MILLISECONDS)) {
             BusinessProfileResponseBO validProfile = getBusinessProfile(businessProfileId);
             BusinessProfileRevisionBO latestProfileRevision = getLatestProfileRevision(externalProductId,
               businessProfileId);

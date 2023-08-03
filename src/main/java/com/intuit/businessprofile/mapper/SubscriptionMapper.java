@@ -3,7 +3,6 @@ package com.intuit.businessprofile.mapper;
 import com.intuit.businessprofile.bo.BusinessProfileResponseBO;
 import com.intuit.businessprofile.bo.ProductBO;
 import com.intuit.businessprofile.bo.SubscriptionBO;
-import com.intuit.businessprofile.dto.response.ProductResponse;
 import com.intuit.businessprofile.dto.response.SubscriptionResponse;
 import com.intuit.businessprofile.entity.SubscriptionEntity;
 import lombok.experimental.UtilityClass;
@@ -19,7 +18,7 @@ public class SubscriptionMapper {
           .build();
     }
 
-    public SubscriptionBO mapToBO(SubscriptionEntity entity) {
+    public SubscriptionBO mapToResponse(SubscriptionEntity entity) {
         return SubscriptionBO.builder()
           .businessProfileId(entity.getBusinessProfileId())
           .externalProductId(entity.getExternalProductId())
@@ -36,7 +35,7 @@ public class SubscriptionMapper {
           .build();
     }
 
-    public SubscriptionResponse mapToBO(SubscriptionBO bo){
+    public SubscriptionResponse mapToResponse(SubscriptionBO bo){
         return SubscriptionResponse.builder()
           .isActive(bo.getIsActive())
           .businessProfileId(bo.getBusinessProfileId())

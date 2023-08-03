@@ -111,7 +111,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
           subscriptionEntityList);
         return subscriptionEntityList
           .stream()
-          .map(SubscriptionMapper::mapToBO)
+          .map(SubscriptionMapper::mapToResponse)
           .collect(Collectors.toList());
     }
 

@@ -32,7 +32,7 @@ public class BusinessProfileUpdateScheduler {
 
     private final BusinessProfileRevisionManager businessProfileRevisionManager;
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void businessProfileUpdaterJob() {
         Map<String, Set<String>> obeserverMap = revisionObserverRegistry.getObserversMap();
         Map<BusinessProfileResponseBO, List<ProfileMappingBO>> businessProfileToMappingMap =

@@ -4,6 +4,8 @@ import com.intuit.businessprofile.api.BusinessProfileApi;
 import com.intuit.businessprofile.api.fallback.BusinessProfileFallback;
 import com.intuit.businessprofile.dto.request.BusinessProfileCreateRequest;
 import com.intuit.businessprofile.dto.request.BusinessProfileUpdateRequest;
+import com.intuit.businessprofile.mapper.BusinessProfileMapper;
+import com.intuit.businessprofile.mapper.BusinessProfileRevisionMapper;
 import com.intuit.businessprofile.service.BusinessProfileRevisionManager;
 import com.intuit.businessprofile.service.BusinessProfileService;
 import com.intuit.businessprofile.validator.domian.BusinessProfileValidator;
@@ -29,7 +31,8 @@ public class BusinessProfileController implements BusinessProfileApi {
     public ResponseEntity<?> createBusinessProfile(BusinessProfileCreateRequest request) {
         BusinessProfileValidator.validateBusinessProfile(request);
         log.info("Received request for business-profile creation :: {}", request);
-        return new ResponseEntity<>(businessProfileRevisionManager.createBusinessProfile(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(BusinessProfileMapper
+          .mapToResponse(businessProfileRevisionManager.createBusinessProfile(request)), HttpStatus.CREATED);
     }
 
     @Override
@@ -44,8 +47,9 @@ public class BusinessProfileController implements BusinessProfileApi {
                                                   String externalProductId) {
         log.info("Request for getting business-profile for productId :: {}, and business-profile with id :: {}",
           externalProductId, businessProfileId);
-        return new ResponseEntity<>(businessProfileRevisionManager.fetchLatestBusinessProfileForProduct(businessProfileId,
-          externalProductId), HttpStatus.OK);
+        return new ResponseEntity<>(BusinessProfileRevisionMapper
+          .mapRevisionToResponse(businessProfileRevisionManager.fetchLatestBusinessProfileForProduct(businessProfileId,
+          externalProductId)), HttpStatus.OK);
     }
 
     @CircuitBreaker(name = "businessProfileCircuitBreakerConfig", fallbackMethod = "fallbackForCreateBusinessProfile")
@@ -56,7 +60,10 @@ public class BusinessProfileController implements BusinessProfileApi {
         log.info("Request for updating business-profile with id :: {}, for productId :: {}, update request :: {}",
           businessProfileId, externalProductId, request);
         return new ResponseEntity<>(
-          businessProfileRevisionManager.updateBusinessProfileRevisionForProduct(externalProductId, businessProfileId, request),
+          BusinessProfileMapper.mapModelToResponse(
+            businessProfileRevisionManager.updateBusinessProfileRevisionForProduct(externalProductId,
+              businessProfileId,
+              request)),
           HttpStatus.OK);
 
     }
@@ -73,7 +80,9 @@ public class BusinessProfileController implements BusinessProfileApi {
         log.info("Request for updating business-profile with id :: {}, update request :: {}",
           businessProfileId, request);
         return new ResponseEntity<>(
-          businessProfileRevisionManager.updateBusinessProfileRevision(businessProfileId,request), HttpStatus.OK);
+          BusinessProfileMapper.mapModelToResponse(
+            businessProfileRevisionManager.updateBusinessProfileRevision(businessProfileId,request)),
+          HttpStatus.OK);
     }
 
 }

@@ -5,6 +5,7 @@ import com.intuit.businessprofile.bo.BusinessProfileRevisionBO;
 import com.intuit.businessprofile.dto.request.BusinessProfileCreateRequest;
 import com.intuit.businessprofile.dto.response.BusinessProfileResponse;
 import com.intuit.businessprofile.entity.BusinessProfileEntity;
+import com.intuit.businessprofile.model.BusinessProfileModel;
 import lombok.experimental.UtilityClass;
 import org.bson.types.ObjectId;
 
@@ -63,6 +64,19 @@ public class BusinessProfileMapper {
           .companyName(revisionBO.getCompanyName())
           .taxIdentifier(revisionBO.getTaxIdentifier())
           .id(new ObjectId(revisionBO.getBusinessProfileId()))
+          .build();
+    }
+
+    public BusinessProfileResponse mapModelToResponse(BusinessProfileModel model){
+        return new BusinessProfileResponse().toBuilder()
+          .id(model.getId().toString())
+          .businessAddress(model.getBusinessAddress())
+          .legalAddress(model.getLegalAddress())
+          .email(model.getEmail())
+          .website(model.getWebsite())
+          .companyName(model.getCompanyName())
+          .legalName(model.getLegalName())
+          .taxIdentifier(model.getTaxIdentifier())
           .build();
     }
 }
